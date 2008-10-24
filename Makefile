@@ -2,7 +2,9 @@ GLIB_CFLAGS := $(shell pkg-config --cflags glib-2.0)
 GLIB_LIBS := $(shell pkg-config --libs glib-2.0)
 
 OMX_CFLAGS := -I$(PWD)/include
+
 UTIL_CFLAGS := -I$(PWD)/util
+UTIL_LIBS := -L$(PWD)/util -lutil
 
 CFLAGS ?= -Wall -ggdb -ansi -std=c99
 
@@ -23,7 +25,7 @@ lib_objs := lib/core.o
 
 $(lib): $(lib_objs)
 $(lib): CFLAGS := $(CFLAGS) $(OMX_CFLAGS) $(UTIL_CFLAGS) $(GLIB_CFLAGS)
-$(lib): LIBS := $(GLIB_LIBS)
+$(lib): LIBS := $(UTIL_LIBS) $(GLIB_LIBS)
 
 targets += $(lib)
 objs += $(lib_objs)
