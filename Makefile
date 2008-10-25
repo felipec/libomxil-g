@@ -68,6 +68,6 @@ endif
 	$(Q)$(CC) $(LDFLAGS) -shared -o $@ $^ $(LIBS)
 
 clean:
-	$(Q)$(RM) $(targets) $(objs) $(deps)
+	$(Q)$(RM) -v $(targets) $(objs) $(deps)
 
 -include $(deps)
