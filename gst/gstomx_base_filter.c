@@ -382,6 +382,11 @@ output_loop (gpointer data)
                         omx_buffer->pBuffer = NULL;
                     }
 
+                    if (omx_buffer->nFlags & OMX_BUFFERFLAG_SYNCFRAME)
+                        GST_BUFFER_FLAG_UNSET (buf, GST_BUFFER_FLAG_DELTA_UNIT);
+                    else
+                        GST_BUFFER_FLAG_SET (buf, GST_BUFFER_FLAG_DELTA_UNIT);
+
                     ret = push_buffer (self, buf);
                 }
                 else
