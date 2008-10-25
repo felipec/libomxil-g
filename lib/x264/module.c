@@ -296,6 +296,8 @@ foo_thread (gpointer cb_data)
 
             if (out_pic.i_type == X264_TYPE_IDR)
                 out_buffer->nFlags |= OMX_BUFFERFLAG_SYNCFRAME;
+            else
+                out_buffer->nFlags &= ~OMX_BUFFERFLAG_SYNCFRAME;
         }
 
         g_mutex_lock (private->flush_mutex);
