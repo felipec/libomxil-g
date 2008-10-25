@@ -349,22 +349,34 @@ comp_FillThisBuffer (OMX_HANDLETYPE handle,
 }
 
 static OMX_ERRORTYPE
+comp_SetCallbacks (OMX_HANDLETYPE handle,
+                   OMX_CALLBACKTYPE *callbacks,
+                   OMX_PTR data)
+{
+    OMX_COMPONENTTYPE *comp;
+    CompPrivate *private;
+
+    comp = handle;
+    private = comp->pComponentPrivate;
+
+    private->callbacks = callbacks;
+    private->app_data = data;
+
+    return OMX_ErrorNone;
+}
+
+static OMX_ERRORTYPE
 comp_ComponentDeInit (OMX_HANDLETYPE handle)
 {
     return OMX_ErrorNone;
 }
 
 static OMX_ERRORTYPE
-get_handle (OMX_HANDLETYPE *handle,
-            OMX_PTR data,
-            OMX_CALLBACKTYPE *callbacks)
+init (OMX_COMPONENTTYPE *comp)
 {
-    OMX_COMPONENTTYPE *comp;
-
-    comp = calloc (1, sizeof (OMX_COMPONENTTYPE));
-    comp->nSize = sizeof (OMX_COMPONENTTYPE);
     comp->nVersion.nVersion = 1;
 
+    comp->SetCallbacks = comp_SetCallbacks;
     comp->ComponentDeInit = comp_ComponentDeInit;
     comp->GetState = comp_GetState;
     comp->GetParameter = comp_GetParameter;
@@ -380,8 +392,6 @@ get_handle (OMX_HANDLETYPE *handle,
 
         private = calloc (1, sizeof (CompPrivate));
         private->state = OMX_StateLoaded;
-        private->callbacks = callbacks;
-        private->app_data = data;
         private->ports = calloc (2, sizeof (CompPrivatePort));
         private->flush_mutex = g_mutex_new ();
 
@@ -423,11 +433,9 @@ get_handle (OMX_HANDLETYPE *handle,
         comp->pComponentPrivate = private;
     }
 
-    *handle = comp;
-
     return OMX_ErrorNone;
 }
 
 ComponentInfo x264enc_info = {
-    .get_handle = get_handle,
+    .init = init,
 };

@@ -21,14 +21,13 @@
 #define CORE_H
 
 #include <OMX_Core.h>
+#include <OMX_Component.h>
 
 typedef struct ComponentInfo ComponentInfo;
 
 struct ComponentInfo
 {
-    OMX_ERRORTYPE (*get_handle) (OMX_HANDLETYPE *handle,
-                                 OMX_PTR data,
-                                 OMX_CALLBACKTYPE *callbacks);
+    OMX_ERRORTYPE (*init) (OMX_COMPONENTTYPE *comp);
 };
 
 #endif /* CORE_H */

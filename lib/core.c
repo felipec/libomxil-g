@@ -65,7 +65,25 @@ OMX_GetHandle (OMX_HANDLETYPE *handle,
     ComponentInfo *info;
     info = g_hash_table_lookup (components, component_name);
     if (info)
-        return info->get_handle (handle, data, callbacks);
+    {
+        OMX_COMPONENTTYPE *comp;
+        OMX_ERRORTYPE error;
+
+        comp = calloc (1, sizeof (OMX_COMPONENTTYPE));
+        comp->nSize = sizeof (OMX_COMPONENTTYPE);
+
+        error = info->init (comp);
+        if (error != OMX_ErrorNone)
+        {
+            free (comp);
+            return error;
+        }
+
+        comp->SetCallbacks ((OMX_HANDLETYPE) comp, callbacks, data);
+        *handle = comp;
+
+        return OMX_ErrorNone;
+    }
     return OMX_ErrorInvalidComponentName;
 }
 
