@@ -121,23 +121,10 @@ imp_new (const gchar *name)
 
     imp = g_new0 (GOmxImp, 1);
 
-    /* Load the OpenMAX IL symbols */
-    {
-        void *handle;
-
-        imp->dl_handle = handle = dlopen (name, RTLD_LAZY);
-        if (!handle)
-        {
-            g_warning ("%s\n", dlerror ());
-            imp_free (imp);
-            return NULL;
-        }
-
-        imp->sym_table.init = dlsym (handle, "OMX_Init");
-        imp->sym_table.deinit = dlsym (handle, "OMX_Deinit");
-        imp->sym_table.get_handle = dlsym (handle, "OMX_GetHandle");
-        imp->sym_table.free_handle = dlsym (handle, "OMX_FreeHandle");
-    }
+    imp->sym_table.init = OMX_Init;
+    imp->sym_table.deinit = OMX_Deinit;
+    imp->sym_table.get_handle = OMX_GetHandle;
+    imp->sym_table.free_handle = OMX_FreeHandle;
 
     return imp;
 }
@@ -145,10 +132,6 @@ imp_new (const gchar *name)
 static void
 imp_free (GOmxImp *imp)
 {
-    if (imp->dl_handle)
-    {
-        dlclose (imp->dl_handle);
-    }
     g_free (imp);
 }
 
