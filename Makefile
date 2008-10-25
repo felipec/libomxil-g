@@ -3,6 +3,7 @@ GLIB_LIBS := $(shell pkg-config --libs glib-2.0)
 
 OMX_CFLAGS := -I$(PWD)/include
 
+CORE_CFLAGS := -I$(PWD)/lib
 UTIL_CFLAGS := -I$(PWD)/util
 UTIL_LIBS := -L$(PWD)/util -lutil
 
@@ -23,9 +24,12 @@ objs += $(util_objs)
 lib := libomxil-g.so
 lib_objs := lib/core.o
 
+# dummy
+lib_objs += lib/dummy/module.o
+
 $(lib): $(lib_objs)
-$(lib): CFLAGS := $(CFLAGS) $(OMX_CFLAGS) $(UTIL_CFLAGS) $(GLIB_CFLAGS)
-$(lib): LIBS := $(UTIL_LIBS) $(GLIB_LIBS)
+$(lib): CFLAGS := $(CFLAGS) $(OMX_CFLAGS) $(CORE_CFLAGS) $(UTIL_CFLAGS) $(GLIB_CFLAGS) $(lib_cflags)
+$(lib): LIBS := $(UTIL_LIBS) $(GLIB_LIBS) $(lib_libs)
 
 targets += $(lib)
 objs += $(lib_objs)
