@@ -42,6 +42,8 @@ $(lib): LIBS := $(UTIL_LIBS) $(GLIB_LIBS) $(lib_libs)
 targets += $(lib)
 objs += $(lib_objs)
 
+version := $(shell ./get-version.sh)
+
 # plugin
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-0.10 gstreamer-base-0.10)
 GST_LIBS := $(shell pkg-config --libs gstreamer-0.10 gstreamer-base-0.10)
@@ -50,7 +52,7 @@ gst_plugin := libgstomx.so
 gst_plugin_objs := gst/gstomx_util.o gst/gstomx_base_filter.o gst/gstomx_base_videoenc.o gst/gstomx_avcenc.o gst/gstomx.o
 
 $(gst_plugin): $(gst_plugin_objs) libomxil-g.a
-$(gst_plugin): CFLAGS := $(CFLAGS) $(OMX_CFLAGS) $(CORE_CFLAGS) $(UTIL_CFLAGS) $(GST_CFLAGS)
+$(gst_plugin): CFLAGS := $(CFLAGS) $(OMX_CFLAGS) $(CORE_CFLAGS) $(UTIL_CFLAGS) $(GST_CFLAGS) -D VERSION='"$(version)"'
 $(gst_plugin): LIBS := $(UTIL_LIBS) $(GST_LIBS) $(lib_libs)
 
 targets += $(gst_plugin)

@@ -47,7 +47,7 @@ GstPluginDesc gst_plugin_desc = {
     "omx",
     (gchar *) "OpenMAX IL",
     plugin_init,
-    "0.1",
+    VERSION,
     "LGPL",
     "source",
     "package",
