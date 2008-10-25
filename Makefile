@@ -27,6 +27,14 @@ lib_objs := lib/core.o
 # dummy
 lib_objs += lib/dummy/module.o
 
+# x264
+X264_CFLAGS := $(shell pkg-config --cflags x264)
+X264_LIBS := $(shell pkg-config --libs x264)
+
+lib_objs += lib/x264/module.o
+lib_cflags += $(X264_CFLAGS)
+lib_libs += $(X264_LIBS)
+
 $(lib): $(lib_objs)
 $(lib): CFLAGS := $(CFLAGS) $(OMX_CFLAGS) $(CORE_CFLAGS) $(UTIL_CFLAGS) $(GLIB_CFLAGS) $(lib_cflags)
 $(lib): LIBS := $(UTIL_LIBS) $(GLIB_LIBS) $(lib_libs)
